@@ -113,6 +113,41 @@ function reset_points() {
 
 }
 
+function submit_points()
+{
+    const startPoint = document.getElementById('input_A').value.split(',').map(coord => Number(coord.trim()));;
+    const endPoint = document.getElementById('input_B').value.split(',').map(coord => Number(coord.trim()));;
+
+    
+        // Create a DirectionsService object
+        const directionsService = new google.maps.DirectionsService();
+
+        // Create a DirectionsRenderer object to display the route on the map
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+          map: map
+        });
+  
+        // Define the request object for the Directions Service
+        const request = {
+        //   origin: {lat:40.827921508999665, lng:-96.65354067610726},
+        //   destination: {lat:40.82792368184621, lng:-96.65211452732663},
+        origin: {lat:startPoint[0], lng:startPoint[1]},
+           destination: {lat:endPoint[0], lng:endPoint[1]},
+        //   origin: startPoint,
+        //   destination: endPoint,
+          travelMode: 'DRIVING' // You can also use 'WALKING', 'BICYCLING', or 'TRANSIT'
+        };
+  
+        // Use the Directions Service to get the route and display it on the map
+        directionsService.route(request, function(response, status) {
+          if (status === 'OK') {
+            directionsRenderer.setDirections(response);
+          } else {
+            console.error('Directions request failed due to ' + status);
+          }
+        });
+}
+
 function select_region() {
 
     for (regionIndex = 0; regionIndex < points.length; regionIndex++) {
